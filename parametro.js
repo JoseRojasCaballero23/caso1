@@ -47,8 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
         archivos.forEach((archivo) => {
             const fileElement = document.createElement('li');
             fileElement.innerHTML = `
-                ${archivo.name} 
-                <a href="${archivo.url}" download="${archivo.name}">Descargar</a>
+                <a href="${archivo.url}" download="${archivo.name}">${archivo.name}</a>
                 <button onclick="eliminarArchivo('${archivo.name}')">Eliminar</button>
             `;
             fileList.appendChild(fileElement);
