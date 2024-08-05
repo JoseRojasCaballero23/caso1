@@ -10,8 +10,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!carpetaNombre || carpetaNombre.length !== 3) {
         carpetaNombre = generarCodigoAleatorio(3);
         window.history.replaceState({}, '', `/${carpetaNombre}`);
-    } else {
-        document.getElementById('codigo-aleatorio').textContent = carpetaNombre;
     }
 
     // Cargar archivos de la carpeta actual
@@ -20,8 +18,10 @@ document.addEventListener('DOMContentLoaded', () => {
     subirArchivoButton.addEventListener('click', () => {
         const archivos = Array.from(archivoInput.files);
         if (archivos.length > 0) {
-            archivos.forEach(agregarArchivo);
-            archivoInput.value = ''; // Resetear el input para poder seleccionar los mismos archivos nuevamente si es necesario
+            archivos.forEach(archivo => {
+                agregarArchivo(archivo);
+            });
+            archivoInput.value = ''; // Resetear el input para permitir subir los mismos archivos nuevamente
         } else {
             alert('Por favor, seleccione al menos un archivo.');
         }
@@ -78,7 +78,6 @@ document.addEventListener('DOMContentLoaded', () => {
         mostrarArchivos();
     };
 });
-
 
 
 
