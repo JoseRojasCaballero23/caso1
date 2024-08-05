@@ -28,9 +28,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function agregarArchivo(file) {
+        // Reemplazar espacios en blanco por guiones bajos en el nombre del archivo
+        const nombreArchivoModificado = file.name.replace(/\s+/g, '_');
+        
         const archivos = obtenerArchivos();
         const archivoObj = {
-            name: file.name,
+            name: nombreArchivoModificado,
             url: URL.createObjectURL(file)
         };
         archivos.push(archivoObj);
@@ -78,6 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
         mostrarArchivos();
     };
 });
+
 
 
 
