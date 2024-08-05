@@ -15,11 +15,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     subirArchivoButton.addEventListener('click', () => {
-        const file = archivoInput.files[0];
-        if (file) {
-            agregarArchivo(file);
+        const archivos = Array.from(archivoInput.files);
+        if (archivos.length > 0) {
+            archivos.forEach(agregarArchivo);
         } else {
-            alert('Por favor, seleccione un archivo primero.');
+            alert('Por favor, seleccione al menos un archivo.');
         }
     });
 
@@ -44,11 +44,11 @@ document.addEventListener('DOMContentLoaded', () => {
     function mostrarArchivos() {
         fileList.innerHTML = '';
         const archivos = obtenerArchivos();
-        archivos.forEach((archivo) => {
+        archivos.forEach((archivo, index) => {
             const fileElement = document.createElement('li');
             fileElement.innerHTML = `
                 <a href="${archivo.url}" download="${archivo.name}">${archivo.name}</a>
-                <button onclick="eliminarArchivo('${archivo.name}')">Eliminar</button>
+                <button onclick="eliminarArchivo(${index})">Eliminar</button>
             `;
             fileList.appendChild(fileElement);
         });
@@ -69,13 +69,14 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('Cargando archivos para la carpeta...');
     }
 
-    window.eliminarArchivo = function(nombreArchivo) {
+    window.eliminarArchivo = function(index) {
         let archivos = obtenerArchivos();
-        archivos = archivos.filter(f => f.name !== nombreArchivo);
+        archivos.splice(index, 1);
         localStorage.setItem(carpetaNombre, JSON.stringify(archivos));
         mostrarArchivos();
     };
 });
+
 
 
 
