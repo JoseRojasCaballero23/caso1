@@ -1,71 +1,53 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const archivoInput = document.getElementById('archivo');
+    const subirArchivoButton = document.getElementById('subir-archivo');
+    const fileList = document.getElementById('file-list');
+    const debugInfo = document.getElementById('debug-info');
+
+    // Verificar si la URL ya contiene un código de tres caracteres
     const url = new URL(window.location.href);
-    let carpetaNombre = url.pathname.slice(1);
+    let carpetaNombre = url.pathname.slice(1); // Obtiene el código actual en la URL
 
     if (!carpetaNombre || carpetaNombre.length !== 3) {
-        carpetaNombre = generarCadenaAleatoria(3);
+        carpetaNombre = generarCodigoAleatorio(3); // Genera un nuevo código
         window.history.replaceState({}, '', `/${carpetaNombre}`);
     } else {
-        document.getElementById('link').textContent += carpetaNombre;
-        cargarArchivos();
+        document.getElementById('codigo-aleatorio').textContent = carpetaNombre; // Muestra el código en la página
+        cargarArchivos(); // Cargar archivos si es necesario
     }
 
-    const form = document.getElementById('form');
-    form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const fileInput = document.getElementById('archivo');
-        const file = fileInput.files[0];
-        if (file) {
-            agregarArchivo(file);
-        } else {
-            alert('Por favor, seleccione un archivo primero.');
+    subirArchivoButton.addEventListener('click', () => {
+      const file = archivoInput.files[0];
+      if (file) {
+        agregarArchivo(file);
+      } else {
+        alert('Por favor, seleccione un archivo primero.');
+      }
+    });
+
+    function agregarArchivo(file) {
+      const fileElement = document.createElement('li');
+      fileElement.textContent = file.name;
+      fileList.appendChild(fileElement);
+      debugInfo.textContent = `Archivo subido: ${file.name}`;
+    }
+
+    function generarCodigoAleatorio(tamano) {
+        const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let codigoAleatorio = '';
+        for (let i = 0; i < tamano; i++) {
+            const caracterAleatorio = caracteres.charAt(Math.floor(Math.random() * caracteres.length));
+            codigoAleatorio += caracterAleatorio;
         }
-    });
+        return codigoAleatorio;
+    }
 
-    const dropArea = document.getElementById('drop-area');
-    dropArea.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        dropArea.classList.add('drag-over');
-    });
-
-    dropArea.addEventListener('dragleave', () => {
-        dropArea.classList.remove('drag-over');
-    });
-
-    dropArea.addEventListener('drop', (e) => {
-        e.preventDefault();
-        dropArea.classList.remove('drag-over');
-        const file = e.dataTransfer.files[0];
-        if (file) {
-            agregarArchivo(file);
-        }
-    });
+    function cargarArchivos() {
+        // Implementar la lógica para cargar archivos aquí si es necesario
+        console.log('Cargando archivos para la carpeta...');
+    }
 });
 
-function generarCadenaAleatoria(tamano) {
-    const caracteres = 'abcdefghijklmnopqrstuvwxyz0123456789';
-    let cadenaAleatoria = '';
-    for (let i = 0; i < tamano; i++) {
-        const caracterAleatorio = caracteres.charAt(Math.floor(Math.random() * caracteres.length));
-        cadenaAleatoria += caracterAleatorio;
-    }
-    return cadenaAleatoria;
-}
-
-function agregarArchivo(file) {
-    console.log('Archivo subido:', file.name);
-    const fileList = document.getElementById('file-list');
-    const fileElement = document.createElement('div');
-    fileElement.className = 'archivos_subidos';
-    fileElement.innerHTML = `
-        <div><a href="#" class="boton-descargar">${file.name}</a></div>
-    `;
-    fileList.appendChild(fileElement);
-}
-
-function cargarArchivos() {
-    console.log('Cargando archivos para la carpeta...');
-}
 
 
 
