@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const subirArchivoButton = document.getElementById('subir-archivo');
     const fileList = document.getElementById('file-list');
 
+    // Obtiene o genera el nombre de la carpeta basado en la URL
     const url = new URL(window.location.href);
     let carpetaNombre = url.pathname.slice(1);
 
@@ -11,13 +12,16 @@ document.addEventListener('DOMContentLoaded', () => {
         window.history.replaceState({}, '', `/${carpetaNombre}`);
     } else {
         document.getElementById('codigo-aleatorio').textContent = carpetaNombre;
-        cargarArchivos();
     }
+
+    // Cargar archivos de la carpeta actual al iniciar
+    cargarArchivos();
 
     subirArchivoButton.addEventListener('click', () => {
         const archivos = Array.from(archivoInput.files);
         if (archivos.length > 0) {
             archivos.forEach(agregarArchivo);
+            archivoInput.value = ''; // Resetear el input para permitir subir los mismos archivos
         } else {
             alert('Por favor, seleccione al menos un archivo.');
         }
@@ -27,13 +31,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const archivos = obtenerArchivos();
         const archivoObj = {
             name: file.name,
-            url: URL.createObjectURL(file)
+            url: URL.createObjectURL(file) // Generar URL simulada
         };
         archivos.push(archivoObj);
         localStorage.setItem(carpetaNombre, JSON.stringify(archivos));
 
         mostrarArchivos();
-        archivoInput.value = '';
     }
 
     function obtenerArchivos() {
@@ -47,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
         archivos.forEach((archivo, index) => {
             const fileElement = document.createElement('li');
             fileElement.innerHTML = `
-                <a href="${archivo.url}" download="${archivo.name}">${archivo.name}</a>
+                <a href="${archivo.url}" download="${archivo.name}" class="archivo-link">${archivo.name}</a>
                 <button onclick="eliminarArchivo(${index})">Eliminar</button>
             `;
             fileList.appendChild(fileElement);
@@ -66,7 +69,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function cargarArchivos() {
         mostrarArchivos();
-        console.log('Cargando archivos para la carpeta...');
     }
 
     window.eliminarArchivo = function(index) {
@@ -76,6 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
         mostrarArchivos();
     };
 });
+
 
 
 
