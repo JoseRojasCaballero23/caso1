@@ -1,11 +1,14 @@
+/* Estilos base */
 body {
   font-family: Arial, sans-serif;
   background-color: #f0f0f0;
+  margin: 0;
+  padding: 0;
 }
 
 .container {
   max-width: 800px;
-  margin: 40px auto;
+  margin: 20px auto;
   padding: 20px;
   background-color: #fff;
   border: 1px solid #ddd;
@@ -24,13 +27,22 @@ body {
   justify-content: center;
 }
 
-.upload-container .upload-box {
-  width: 45%;
+.upload-container .upload-box,
+.file-list-container .file-list {
+  width: 100%;
+  max-width: 100%;
   margin: 10px;
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 10px;
   background-color: #f9f9f9;
+  box-sizing: border-box;
+}
+
+.upload-container .upload-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .upload-container .upload-box label {
@@ -56,6 +68,7 @@ body {
   background-color: #4CAF50;
   color: #fff;
   cursor: pointer;
+  margin-top: 10px;
 }
 
 .upload-container .upload-box button[type="submit"]:hover {
@@ -63,18 +76,7 @@ body {
 }
 
 .file-list-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.file-list-container .file-list {
-  width: 45%;
-  margin: 10px;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  background-color: #f9f9f9;
+  margin-top: 20px;
 }
 
 .file-list-container .file-list ul {
@@ -86,6 +88,9 @@ body {
 .file-list-container .file-list li {
   padding: 10px;
   border-bottom: 1px solid #ccc;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .file-list-container .file-list li:last-child {
@@ -95,8 +100,39 @@ body {
 .file-list-container .file-list a {
   text-decoration: none;
   color: #337ab7;
+  flex: 1;
 }
 
 .file-list-container .file-list a:hover {
   color: #23527c;
 }
+
+.file-list-container .file-list button {
+  border: none;
+  background-color: #ff4c4c;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.file-list-container .file-list button:hover {
+  background-color: #cc0000;
+}
+
+@media (max-width: 768px) {
+  .upload-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .upload-container .upload-box {
+    width: 90%;
+  }
+
+  .file-list-container .file-list {
+    width: 90%;
+  }
+}
+
