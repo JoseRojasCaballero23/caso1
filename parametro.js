@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
         window.history.replaceState({}, '', `/${carpetaNombre}`);
     } else {
         document.getElementById('codigo-aleatorio').textContent = carpetaNombre; // Muestra el código en la página
-        cargarArchivos(); // Cargar archivos si es necesario
+        cargarArchivos(); // Cargar archivos guardados
     }
 
     subirArchivoButton.addEventListener('click', () => {
@@ -26,10 +26,32 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function agregarArchivo(file) {
-      const fileElement = document.createElement('li');
-      fileElement.textContent = file.name;
-      fileList.appendChild(fileElement);
+      // Guarda el archivo en localStorage
+      const archivos = obtenerArchivos();
+      archivos.push(file.name);
+      localStorage.setItem(carpetaNombre, JSON.stringify(archivos));
+
+      mostrarArchivos(); // Actualiza la lista de archivos en la interfaz
+      archivoInput.value = ''; // Limpiar el input después de subir el archivo
       debugInfo.textContent = `Archivo subido: ${file.name}`;
+    }
+
+    function obtenerArchivos() {
+      const archivos = localStorage.getItem(carpetaNombre);
+      return archivos ? JSON.parse(archivos) : [];
+    }
+
+    function mostrarArchivos() {
+      fileList.innerHTML = ''; // Limpia la lista antes de mostrar los archivos
+      const archivos = obtenerArchivos();
+      archivos.forEach((archivo) => {
+        const fileElement = document.createElement('li');
+        fileElement.innerHTML = `
+          ${archivo} <button onclick="descargarArchivo('${archivo}')">Descargar</button>
+          <button onclick="eliminarArchivo('${archivo}')">Eliminar</button>
+        `;
+        fileList.appendChild(fileElement);
+      });
     }
 
     function generarCodigoAleatorio(tamano) {
@@ -43,9 +65,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function cargarArchivos() {
-        // Implementar la lógica para cargar archivos aquí si es necesario
+        mostrarArchivos(); // Mostrar archivos guardados
         console.log('Cargando archivos para la carpeta...');
     }
+
+    // Funciones globales para eliminar y descargar archivos
+    window.descargarArchivo = function(archivo) {
+      // Aquí iría la lógica para descargar el archivo. En un entorno real, esto se haría mediante un servidor.
+      alert('Funcionalidad de descarga no implementada');
+    };
+
+    window.eliminarArchivo = function(archivo) {
+      let archivos = obtenerArchivos();
+      archivos = archivos.filter(f => f !== archivo);
+      localStorage.setItem(carpetaNombre, JSON.stringify(archivos));
+      mostrarArchivos(); // Actualiza la lista después de eliminar un archivo
+    };
 });
 
 
